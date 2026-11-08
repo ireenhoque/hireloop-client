@@ -1,7 +1,11 @@
+
 "use client"
 
 import { useState } from "react"
+import type { ChangeEvent, FormEvent } from "react"
 import Link from "next/link"
+
+import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -19,15 +23,47 @@ const initialFormData = {
 
 export function SignInForm() {
   const [formData, setFormData] = useState(initialFormData)
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log("Sign in data:", formData)
+
+    setIsLoading(true)
+    setErrorMessage("")
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+        rememberMe: true,
+        callbackURL: "/",
+      })
+
+      if (error) {
+        setErrorMessage(
+          error.message || "Invalid email or password."
+        )
+        return
+      }
+
+      console.log("Sign in successful:", data)
+    } catch (error) {
+      console.error("Sign in error:", error)
+
+      setErrorMessage("Something went wrong. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -38,12 +74,14 @@ export function SignInForm() {
           Sign in to your HireLoop account to continue
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-sm font-medium">
               Email
             </label>
+
             <Input
               id="email"
               name="email"
@@ -59,6 +97,7 @@ export function SignInForm() {
             <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
+
             <Input
               id="password"
               name="password"
@@ -70,11 +109,22 @@ export function SignInForm() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Sign In
+          {errorMessage && (
+            <p className="text-sm text-destructive" role="alert">
+              {errorMessage}
+            </p>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
       </CardContent>
+
       <div className="px-(--card-spacing) pb-(--card-spacing) text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Link

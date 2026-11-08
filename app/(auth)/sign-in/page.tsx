@@ -1,3 +1,4 @@
+
 import Link from "next/link"
 import { SignInForm } from "@/components/auth/sign-in-form"
 
@@ -8,8 +9,10 @@ export default function SignInPage() {
         <Link href="/" className="font-heading text-xl font-semibold">
           HireLoop
         </Link>
+
         <SignInForm />
       </div>
     </main>
   )
 }
+
