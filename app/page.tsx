@@ -1,5 +1,7 @@
 import { HeroBanner } from "@/components/hero-banner"
 import { SiteNavbar } from "@/components/site-navbar"
+import { CtaSection } from "@/components/cta-section"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function Page() {
   return (
@@ -7,7 +9,9 @@ export default function Page() {
       <SiteNavbar />
       <main>
         <HeroBanner />
+        <CtaSection />
       </main>
+      <SiteFooter />
     </>
   )
 }
