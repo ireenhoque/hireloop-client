@@ -11,12 +11,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { cn } from "cn"
+
+const ROLES = ["seeker", "recruiter", "admin"] as const
+
+export type Role = (typeof ROLES)[number]
 
 const initialFormData = {
   fullName: "",
   email: "",
   password: "",
   confirmPassword: "",
+  role: "seeker" as Role,
 }
 
 // Data passed to the parent's submit handler (confirm password is
@@ -25,6 +31,7 @@ export type AuthFormData = {
   name: string
   email: string
   password: string
+  role: Role
 }
 
 export function SignUpForm({
@@ -57,6 +64,7 @@ export function SignUpForm({
       name: formData.fullName,
       email: formData.email,
       password: formData.password,
+      role: formData.role,
     })
   }
 
@@ -83,6 +91,45 @@ export function SignUpForm({
               value={formData.fullName}
               onChange={handleChange}
             />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="role-seeker" className="text-sm font-medium">
+              I am a
+            </label>
+            <div
+              role="radiogroup"
+              aria-label="Account type"
+              className="grid grid-cols-3 gap-1.5"
+            >
+              {ROLES.map((role) => (
+                <Button
+                  key={role}
+                  type="button"
+                  role="radio"
+                  aria-checked={formData.role === role}
+                  variant={formData.role === role ? "default" : "outline"}
+                  size="sm"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, role }))
+                  }
+                >
+                  <span className="capitalize">{role}</span>
+                </Button>
+              ))}
+            </div>
+            <p
+              className={cn(
+                "text-xs text-muted-foreground",
+                formData.role === "admin" && "text-amber-600 dark:text-amber-400"
+              )}
+            >
+              {formData.role === "seeker" &&
+                "Find jobs and apply with your profile"}
+              {formData.role === "recruiter" &&
+                "Post jobs and manage candidates"}
+              {formData.role === "admin" && "Manage the platform"}
+            </p>
           </div>
 
           <div className="flex flex-col gap-1.5">
