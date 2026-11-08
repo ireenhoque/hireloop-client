@@ -1,5 +1,4 @@
 import Image from "next/image"
-import Link from "next/link"
 import { Briefcase, Building2, Monitor, Star, Users } from "lucide-react"
 
 import { SearchBar } from "@/components/search-bar"
@@ -73,13 +72,13 @@ function HeroBanner() {
           <span className="text-sm text-foreground/50">Trending Position</span>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {trendingPositions.map((position) => (
-              <Link
+              <button
                 key={position}
-                href={`/jobs?query=${encodeURIComponent(position)}`}
-                className="inline-block rounded-full border border-border/70 bg-card/60 px-3 py-1.5 text-xs text-foreground/90 transition-colors hover:bg-muted/60 hover:text-foreground"
+                type="button"
+                className="rounded-full border border-border/70 bg-card/60 px-3 py-1.5 text-xs text-foreground/90 transition-colors hover:bg-muted/60 hover:text-foreground"
               >
                 {position}
-              </Link>
+              </button>
             ))}
           </div>
         </div>

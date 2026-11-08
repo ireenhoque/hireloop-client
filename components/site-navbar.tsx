@@ -8,9 +8,9 @@ import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const links = [
-  { href: "/jobs", label: "Browse Jobs" },
-  { href: "/company", label: "Company" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "#", label: "Browse Jobs" },
+  { href: "#", label: "Company" },
+  { href: "#", label: "Pricing" },
 ]
 
 function SiteNavbar() {
@@ -44,7 +44,9 @@ function SiteNavbar() {
                 {link.label}
               </a>
             ))}
+
             <span aria-hidden="true" className="h-4 w-px bg-border/70" />
+
             <Link
               href="/sign-in"
               className="text-primary transition-opacity hover:opacity-80"
@@ -79,28 +81,28 @@ function SiteNavbar() {
         <div className="mx-auto mt-2 max-w-6xl rounded-xl border border-border/40 bg-card p-4 md:hidden">
           <nav aria-label="Mobile" className="flex flex-col">
             {links.map((link) => (
-              <Link
+              <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setOpen(false)}
                 className="rounded-lg px-2 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </nav>
+
           <div className="mt-3 flex flex-col gap-3 border-t border-border/60 pt-4">
             <Link
               href="/sign-in"
-              onClick={() => setOpen(false)}
               className="px-2 text-sm font-medium text-primary transition-opacity hover:opacity-80"
             >
               Sign In
             </Link>
+
             <Button
-              nativeButton={false}
-              render={<Link href="/sign-up" onClick={() => setOpen(false)} />}
               className="w-full"
+              nativeButton={false}
+              render={<Link href="/sign-up" />}
             >
               Get Started
             </Button>

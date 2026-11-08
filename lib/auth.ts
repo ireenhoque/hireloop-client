@@ -1,21 +1,21 @@
-import { betterAuth } from "better-auth";
-import { MongoClient } from "mongodb";
-import { mongodbAdapter } from "@better-auth/mongo-adapter";
-const client = new MongoClient("mongodb://localhost:27017/database");
-const db = client.db('hireloopdb');
+import { betterAuth } from "better-auth"
+import { mongodbAdapter } from "@better-auth/mongo-adapter"
+
+// Shared, reusable Mongo connection (connected via lib/mongodb.ts utilities).
+import { mongoClient, mongoDb } from "@/lib/mongodb"
 
 export const auth = betterAuth({
-
-    emailAndPassword: {
-        enabled: true,
+  emailAndPassword: {
+    enabled: true,
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-    socialProviders: {
-        google: {
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        },
-    },
-    database: mongodbAdapter(db, {
-        client,
-    }),
-});
+  },
+  // Targets the intended `loopadmin` database through a single shared client.
+  database: mongodbAdapter(mongoDb, {
+    client: mongoClient,
+  }),
+})

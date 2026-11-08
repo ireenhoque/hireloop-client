@@ -1,29 +1,13 @@
 "use client"
 
 import { MapPin, Search } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 
 function SearchBar() {
-  const router = useRouter()
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const data = new FormData(event.currentTarget)
-    const params = new URLSearchParams()
-    const query = String(data.get("query") ?? "").trim()
-    const location = String(data.get("location") ?? "").trim()
-    if (query) params.set("query", query)
-    if (location) params.set("location", location)
-
-    router.push(params.size > 0 ? `/jobs?${params.toString()}` : "/jobs")
-  }
-
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(event) => event.preventDefault()}
       className="mx-auto mt-8 flex max-w-2xl flex-col gap-1.5 rounded-xl border border-border/60 bg-card/50 p-1.5 backdrop-blur-[2px] sm:flex-row"
     >
       <div className="flex flex-1 flex-col gap-1.5 sm:flex-row sm:items-stretch sm:gap-0">
