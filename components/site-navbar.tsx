@@ -9,11 +9,7 @@ import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
 
-const links = [
-  { href: "#", label: "Browse Jobs" },
-  { href: "#", label: "Company" },
-  { href: "#", label: "Pricing" },
-]
+
 
 function SiteNavbar() {
   const router = useRouter()
@@ -23,6 +19,13 @@ function SiteNavbar() {
     isPending: isSessionPending,
     refetch: refetchSession,
   } = authClient.useSession()
+
+  const links = [
+  { href: "/jobs", label: "Browse Jobs" },
+  { href: "/company", label: "Company" },
+  { href: "/pricing", label: "Pricing" },
+  { href: `/dashboard/${session?.user?.role || 'seeker'}`, label: "Dashboard" },
+]
 
   const [isSigningOut, setIsSigningOut] = React.useState(false)
   const [signOutError, setSignOutError] = React.useState("")
