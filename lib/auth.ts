@@ -28,13 +28,13 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: ['seeker', 'recruiter', 'admin'],
+        type: ["seeker", "recruiter", "admin"],
         // Allow the sign-up endpoint to accept `role` from the client
         // (validated by the `before` hook above).
         input: true,
         defaultValue: "seeker",
-      }
-    }
+      },
+    },
   },
   socialProviders: {
     google: {

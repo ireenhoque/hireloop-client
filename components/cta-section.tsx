@@ -9,10 +9,7 @@ function CtaSection() {
       {/* Dome artwork: purple glow underneath, wireframe overlay on top. The
           PNG's lower half is a translucent black fade that vignettes the glow
           back into the black page. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-      >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 left-1/2 h-[min(58vw,560px)] w-[min(86vw,1180px)] -translate-x-1/2 bg-[radial-gradient(50%_50%_at_50%_38%,rgba(97,96,255,0.72)_0%,rgba(76,74,224,0.38)_52%,rgba(47,46,150,0.12)_74%,transparent_100%)]" />
         <Image
           src="/images/cta-bg.png"

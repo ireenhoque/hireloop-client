@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -50,9 +49,7 @@ export function SignInForm() {
       })
 
       if (error) {
-        setErrorMessage(
-          error.message || "Invalid email or password."
-        )
+        setErrorMessage(error.message || "Invalid email or password.")
         return
       }
 
@@ -115,11 +112,7 @@ export function SignInForm() {
             </p>
           )}
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>

@@ -9,8 +9,6 @@ import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
 
-
-
 function SiteNavbar() {
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
@@ -21,11 +19,14 @@ function SiteNavbar() {
   } = authClient.useSession()
 
   const links = [
-  { href: "/jobs", label: "Browse Jobs" },
-  { href: "/company", label: "Company" },
-  { href: "/pricing", label: "Pricing" },
-  { href: `/dashboard/${session?.user?.role || 'seeker'}`, label: "Dashboard" },
-]
+    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/company", label: "Company" },
+    { href: "/pricing", label: "Pricing" },
+    {
+      href: `/dashboard/${session?.user?.role || "seeker"}`,
+      label: "Dashboard",
+    },
+  ]
 
   const [isSigningOut, setIsSigningOut] = React.useState(false)
   const [signOutError, setSignOutError] = React.useState("")
@@ -38,7 +39,9 @@ function SiteNavbar() {
       const { error } = await authClient.signOut()
 
       if (error) {
-        setSignOutError(error.message || "Failed to sign out. Please try again.")
+        setSignOutError(
+          error.message || "Failed to sign out. Please try again."
+        )
         return
       }
 
@@ -61,7 +64,12 @@ function SiteNavbar() {
   return (
     <header className="px-3 pt-3 sm:px-5 sm:pt-4">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-xl border border-border/40 bg-card/50 py-3 pr-3 pl-4 sm:pr-3.5 sm:pl-5">
-        <Link href="/" aria-label="HireLoop home" className="shrink-0" onClick={closeMenu}>
+        <Link
+          href="/"
+          aria-label="HireLoop home"
+          className="shrink-0"
+          onClick={closeMenu}
+        >
           <Image
             src="/images/logo.png"
             alt="HireLoop"

@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react"
 
 const ManageJobsPage = () => {
-    return (
-        <div>
-            <h2>Manage Jobs</h2>
-        </div>
-    );
-};
+  return (
+    <div>
+      <h2>Manage Jobs</h2>
+    </div>
+  )
+}
 
-export default ManageJobsPage;
+export default ManageJobsPage

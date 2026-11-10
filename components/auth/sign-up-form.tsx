@@ -110,9 +110,7 @@ export function SignUpForm({
                   aria-checked={formData.role === role}
                   variant={formData.role === role ? "default" : "outline"}
                   size="sm"
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, role }))
-                  }
+                  onClick={() => setFormData((prev) => ({ ...prev, role }))}
                 >
                   <span className="capitalize">{role}</span>
                 </Button>
@@ -121,7 +119,8 @@ export function SignUpForm({
             <p
               className={cn(
                 "text-xs text-muted-foreground",
-                formData.role === "admin" && "text-amber-600 dark:text-amber-400"
+                formData.role === "admin" &&
+                  "text-amber-600 dark:text-amber-400"
               )}
             >
               {formData.role === "seeker" &&

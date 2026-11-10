@@ -12,7 +12,7 @@ export function useIsMobile() {
   const isMobile = React.useSyncExternalStore(
     subscribe,
     () => window.innerWidth < MOBILE_BREAKPOINT,
-    () => false, // server snapshot: render the desktop layout on first paint
+    () => false // server snapshot: render the desktop layout on first paint
   )
 
   return isMobile

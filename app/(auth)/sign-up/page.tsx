@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import Link from "next/link"
 import { SignUpForm } from "@/components/auth/sign-up-form"
@@ -7,14 +7,13 @@ import type { AuthFormData } from "@/components/auth/sign-up-form"
 
 export default function SignUpPage() {
   const handleSignUp = async (data: AuthFormData) => {
-    const { data: signUpResponse, error } =
-      await authClient.signUp.email({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: data.role,
-        callbackURL: "/",
-      })
+    const { data: signUpResponse, error } = await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+      callbackURL: "/",
+    })
 
     console.log("signup response", signUpResponse, error)
   }

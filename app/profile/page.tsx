@@ -63,7 +63,7 @@ export default function ProfilePage() {
             aria-hidden="true"
             className="h-24 bg-gradient-to-r from-primary/15 via-primary/8 to-transparent"
           >
-            <div className="ml-6 mt-3 h-1 w-12 rounded-full bg-primary/30" />
+            <div className="mt-3 ml-6 h-1 w-12 rounded-full bg-primary/30" />
           </div>
 
           {/* Avatar overlapping the cover */}
@@ -112,7 +112,9 @@ export default function ProfilePage() {
               </span>
               <span className="flex min-w-0 flex-col">
                 <span className="text-xs text-muted-foreground">Email</span>
-                <span className="truncate text-sm font-medium">{user.email}</span>
+                <span className="truncate text-sm font-medium">
+                  {user.email}
+                </span>
               </span>
             </div>
           </div>
@@ -126,7 +128,9 @@ export default function ProfilePage() {
               nativeButton={false}
               render={<Link href="/" />}
             >
-              <span className="text-muted-foreground text-sm">Back to jobs</span>
+              <span className="text-sm text-muted-foreground">
+                Back to jobs
+              </span>
             </Button>
           </div>
         </div>
