@@ -1,4 +1,4 @@
-import type { JobFormData } from "@/app/dashboard/recruiter/jobs/new/page"
+import type { JobFormData } from "@/lib/types/jobs"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000"
 

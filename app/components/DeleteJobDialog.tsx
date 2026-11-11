@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { deleteJob } from "@/lib/actions/jobs"
 import { Button } from "@/components/ui/button"
-import type { JobPost } from "../dashboard/recruiter/jobs/manage-jobs-table"
+import type { JobPost } from "@/lib/types/jobs"
 import { toast } from "@/components/ui/toast"
 
 export function DeleteJobDialog({
@@ -48,7 +48,7 @@ export function DeleteJobDialog({
           : "Something went wrong while deleting this job."
       )
     } finally {
-      setIsDeleting(false);
+      setIsDeleting(false)
       toast.add({
         title: "Job deleted",
         description: "The job has been successfully deleted.",

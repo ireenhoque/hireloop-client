@@ -18,100 +18,17 @@ import {
 import { createJob } from "@/lib/actions/jobs"
 import { toast } from "@/components/ui/toast"
 import { useRouter } from "next/navigation"
-
-
-const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"]
-export type JobStatus = "Active" | "Expired"
-
-const JOB_CATEGORIES = [
-  "Engineering & Tech",
-  "Design & Creative",
-  "Product & Management",
-  "Marketing & Sales",
-  "Finance & Accounting",
-  "Customer Support",
-  "Data & Analytics",
-  "Other",
-]
-
-const SALARY_FREQUENCIES = [
-  "per hour",
-  "per day",
-  "per week",
-  "per month",
-  "per year",
-]
-
-export type JobFormData = {
-  title: string
-  companyName: string
-  category: string
-  jobType: string
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: string
-  maxSalary: string
-  salaryFrequency: string
-  responsibilities: string
-  qualifications: string
-  applicants?: number
-  status?: JobStatus
-}
-
-export const initialFormData: JobFormData = {
-  title: "",
-  companyName: "",
-  category: "",
-  jobType: "Full-time",
-  isRemote: false,
-  location: "",
-  deadline: "",
-  minSalary: "",
-  maxSalary: "",
-  salaryFrequency: "per hour",
-  responsibilities: "",
-  qualifications: "",
-  applicants: 0,
-  status: "Active",
-}
-
-function SectionHeader({ step, title }: { step: number; title: string }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="size-1.5 shrink-0 rounded-full bg-primary" />
-      <h2 className="text-lg font-semibold">
-        {step}. {title}
-      </h2>
-    </div>
-  )
-}
-
-function Field({
-  label,
-  htmlFor,
-  note,
-  children,
-}: {
-  label: string
-  htmlFor?: string
-  note?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between">
-        <label htmlFor={htmlFor} className="text-sm font-medium">
-          {label} <span className="text-primary">*</span>
-        </label>
-
-        {note && <span className="text-xs text-muted-foreground">{note}</span>}
-      </div>
-
-      {children}
-    </div>
-  )
-}
+import type { JobFormData } from "@/lib/types/jobs"
+import {
+  JOB_CATEGORIES,
+  JOB_TYPES,
+  SALARY_FREQUENCIES,
+  initialFormData,
+} from "@/lib/constants/jobs"
+import { PageHeader } from "@/app/components/page-header"
+import { Panel } from "@/app/components/panel"
+import { Field } from "../_components/field"
+import { SectionHeader } from "../_components/section-header"
 
 export default function NewJobsPage() {
   const router = useRouter()
@@ -160,7 +77,7 @@ export default function NewJobsPage() {
     setErrorMessage("")
 
     try {
-      const result = await createJob(formData);
+      const result = await createJob(formData)
       if (result.insertedId) {
         console.log("Job creation result:", result)
         toast.add({
@@ -187,23 +104,12 @@ export default function NewJobsPage() {
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-3xl px-6 py-8">
-      {/* Header */}
-      <p className="text-sm text-muted-foreground">
-        Manage Jobs <span className="mx-1.5">›</span>{" "}
-        <span className="text-primary">Create New Listing</span>
-      </p>
-
-      <div className="mt-1 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Post a New Job
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Fill in the position specifications to attract qualified talent
-            across our network.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumb="Manage Jobs"
+        current="Create New Listing"
+        title="Post a New Job"
+        description="Fill in the position specifications to attract qualified talent across our network."
+      />
 
       {successMessage && (
         <p className="mt-4 text-sm text-primary" role="status">
@@ -218,7 +124,7 @@ export default function NewJobsPage() {
       )}
 
       {/* Form card */}
-      <div className="mt-6 flex flex-col divide-y divide-border overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10">
+      <Panel className="mt-6 flex flex-col divide-y divide-border">
         {/* 1. Basic Information */}
         <section className="space-y-5 p-6">
           <SectionHeader step={1} title="Basic Information" />
@@ -439,7 +345,7 @@ export default function NewJobsPage() {
             <ArrowRight />
           </Button>
         </section>
-      </div>
+      </Panel>
     </form>
   )
 }

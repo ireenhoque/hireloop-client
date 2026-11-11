@@ -23,14 +23,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { JobFormData } from "./new/page"
+import type { JobFormData, JobPost } from "@/lib/types/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
-
-
-export type JobPost = JobFormData & {
-  _id: string
-  postedAgo?: string
-}
+import { Panel } from "@/app/components/panel"
 
 const CATEGORY_STYLES: Record<
   string,
@@ -141,7 +136,7 @@ export default function ManageJobsTable({ jobs }: { jobs: JobPost[] }) {
   }
 
   return (
-    <div className="mt-6 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10">
+    <Panel className="mt-6">
       <div className="overflow-x-auto">
         <table className="w-full min-w-2xl text-left">
           <thead>
@@ -313,6 +308,6 @@ export default function ManageJobsTable({ jobs }: { jobs: JobPost[] }) {
           </div>
         )}
       </div>
-    </div>
+    </Panel>
   )
 }
