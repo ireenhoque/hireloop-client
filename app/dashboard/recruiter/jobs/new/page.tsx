@@ -16,8 +16,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { createJob } from "@/lib/actions/jobs"
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
+
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"]
+export type JobStatus = "Active" | "Expired"
 
 const JOB_CATEGORIES = [
   "Engineering & Tech",
@@ -51,9 +55,11 @@ export type JobFormData = {
   salaryFrequency: string
   responsibilities: string
   qualifications: string
+  applicants?: number
+  status?: JobStatus
 }
 
-const initialFormData: JobFormData = {
+export const initialFormData: JobFormData = {
   title: "",
   companyName: "",
   category: "",
@@ -66,6 +72,8 @@ const initialFormData: JobFormData = {
   salaryFrequency: "per hour",
   responsibilities: "",
   qualifications: "",
+  applicants: 0,
+  status: "Active",
 }
 
 function SectionHeader({ step, title }: { step: number; title: string }) {
@@ -106,6 +114,7 @@ function Field({
 }
 
 export default function NewJobsPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState<JobFormData>(initialFormData)
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
@@ -151,9 +160,16 @@ export default function NewJobsPage() {
     setErrorMessage("")
 
     try {
-      const result = await createJob(formData)
+      const result = await createJob(formData);
+      if (result.insertedId) {
+        console.log("Job creation result:", result)
+        toast.add({
+          title: "Job Created",
+          description: "The job has been successfully created.",
+        })
+        router.push("/dashboard/recruiter/jobs")
+      }
 
-      console.log("Job creation result:", result)
       setSuccessMessage("Job posted successfully!")
 
       setFormData(initialFormData)

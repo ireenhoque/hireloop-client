@@ -17,3 +17,18 @@ export const createJob = async (data: JobFormData) => {
 
   return res.json()
 }
+
+export const deleteJob = async (id: string) => {
+  const res = await fetch(`${BASE_URL}/jobs/${id}`, {
+    method: "DELETE",
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete job (status ${res.status})`)
+  }
+
+  // The API may respond with an empty body on delete
+  const raw = await res.text()
+
+  return raw ? JSON.parse(raw) : null
+}
