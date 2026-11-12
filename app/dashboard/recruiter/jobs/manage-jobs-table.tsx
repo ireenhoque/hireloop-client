@@ -3,81 +3,22 @@
 import { useState } from "react"
 import Link from "next/link"
 import {
-  Briefcase,
-  ChartColumn,
-  Code,
   EllipsisVertical,
   Euro,
   Globe,
-  Headset,
-  Layers,
   MapPin,
-  Megaphone,
-  Palette,
   Plus,
   Users,
-  Wallet,
-  type LucideIcon,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { JobFormData, JobPost } from "@/lib/types/jobs"
+import type { JobPost } from "@/lib/types/jobs"
+import { CATEGORY_STYLES, FALLBACK_CATEGORY_STYLE } from "@/lib/category-styles"
+import { formatCompensation, formatLocation } from "@/lib/format"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 import { Panel } from "@/app/components/panel"
-
-const CATEGORY_STYLES: Record<
-  string,
-  { icon: LucideIcon; tile: string; label: string }
-> = {
-  "Engineering & Tech": {
-    icon: Code,
-    tile: "bg-sky-500/15 text-sky-400",
-    label: "text-sky-400",
-  },
-  "Design & Creative": {
-    icon: Palette,
-    tile: "bg-orange-500/15 text-orange-400",
-    label: "text-orange-400",
-  },
-  "Product & Management": {
-    icon: Layers,
-    tile: "bg-indigo-500/15 text-indigo-400",
-    label: "text-indigo-400",
-  },
-  "Marketing & Sales": {
-    icon: Megaphone,
-    tile: "bg-pink-500/15 text-pink-400",
-    label: "text-pink-400",
-  },
-  "Finance & Accounting": {
-    icon: Wallet,
-    tile: "bg-emerald-500/15 text-emerald-400",
-    label: "text-emerald-400",
-  },
-  "Customer Support": {
-    icon: Headset,
-    tile: "bg-amber-500/15 text-amber-400",
-    label: "text-amber-400",
-  },
-  "Data & Analytics": {
-    icon: ChartColumn,
-    tile: "bg-cyan-500/15 text-cyan-400",
-    label: "text-cyan-400",
-  },
-  Other: {
-    icon: Briefcase,
-    tile: "bg-muted text-muted-foreground",
-    label: "text-muted-foreground",
-  },
-}
-
-const FALLBACK_CATEGORY_STYLE = {
-  icon: Briefcase,
-  tile: "bg-muted text-muted-foreground",
-  label: "text-muted-foreground",
-}
 
 const MONTHS = [
   "Jan",
@@ -100,24 +41,6 @@ function formatDeadline(value: string) {
   if (!year || !month || !day) return value
 
   return `${MONTHS[month - 1]} ${day}, ${year}`
-}
-
-function formatSalary(value: string) {
-  const amount = Number(value)
-
-  if (!Number.isFinite(amount)) return value
-
-  return amount >= 1000 ? `€${Math.round(amount / 1000)}k` : `€${amount}`
-}
-
-function formatCompensation(job: JobFormData) {
-  const frequency = job.salaryFrequency.replace("per ", "/ ")
-
-  return `${formatSalary(job.minSalary)} – ${formatSalary(job.maxSalary)} ${frequency}`
-}
-
-function formatLocation(job: JobFormData) {
-  return job.isRemote ? `Remote (${job.location})` : job.location
 }
 
 export default function ManageJobsTable({ jobs }: { jobs: JobPost[] }) {
