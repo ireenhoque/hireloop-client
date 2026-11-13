@@ -1,5 +1,7 @@
 "use client"
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+
 import { Panel } from "@/app/components/panel"
 import { JobCard } from "@/components/jobs/job-card"
 import { JobFilters, type JobFilterCounts } from "@/components/jobs/job-filters"
@@ -19,22 +21,55 @@ type JobsBrowserProps = {
 }
 
 export function JobsBrowser({ jobs }: JobsBrowserProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
   const counts: JobFilterCounts = {
     jobTypes: countBy(jobs.map((job) => job.jobType)),
     categories: countBy(jobs.map((job) => job.category)),
     remoteOnly: jobs.filter((job) => job.isRemote).length,
   }
 
+  // Empty values remove the param, everything else sets it.
+  const syncQuery = (patch: Record<string, string | undefined>) => {
+    console.log("Filter change:", patch) // TODO: remove after debugging
+
+    const params = new URLSearchParams(searchParams)
+
+    for (const [key, value] of Object.entries(patch)) {
+      if (value) {
+        params.set(key, value)
+      } else {
+        params.delete(key)
+      }
+    }
+
+    router.push(`${pathname}?${params}`)
+  }
+
   return (
     <>
-      {/* TODO: sync the search query with the URL */}
-      <JobSearchBar onSearch={() => {}} />
+      <JobSearchBar
+        defaultQuery={searchParams.get("search") ?? undefined}
+        onSearch={(search) => syncQuery({ search })}
+      />
 
       <div className="mt-6 grid items-start gap-6 lg:grid-cols-[15rem_1fr]">
         <aside>
           <Panel className="p-4">
-            {/* TODO: sync the filter state with the URL */}
-            <JobFilters counts={counts} onChange={() => {}} />
+            <JobFilters
+              counts={counts}
+              onChange={(filters) =>
+                syncQuery({
+                  jobType: filters.jobType,
+                  category: filters.category,
+                  isRemote: filters.remoteOnly ? "true" : undefined,
+                  minSalary: filters.minSalary,
+                  maxSalary: filters.maxSalary,
+                })
+              }
+            />
           </Panel>
         </aside>
 
@@ -43,14 +78,14 @@ export function JobsBrowser({ jobs }: JobsBrowserProps) {
             <h1 className="text-lg font-semibold">
               Found {jobs.length} {jobs.length === 1 ? "Job" : "Jobs"}
             </h1>
-            {/* TODO: sync the sort option with the URL */}
-            <JobSort onValueChange={() => {}} />
+            <JobSort
+              value={searchParams.get("sort") ?? undefined}
+              onValueChange={(sort) => syncQuery({ sort })}
+            />
           </div>
 
           <div className="mt-4 flex flex-col gap-4">
-            {jobs.map((job) => (
-              <JobCard key={job._id} job={job} />
-            ))}
+            {jobs.map((job) => <JobCard key={job._id} job={job} />)}
           </div>
 
           {jobs.length === 0 && (

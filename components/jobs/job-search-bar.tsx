@@ -6,17 +6,32 @@ import { Search } from "lucide-react"
 import { Panel } from "@/app/components/panel"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
 
 type JobSearchBarProps = {
+  /** Initial query, e.g. from the URL so the input survives a reload. */
+  defaultQuery?: string
   onSearch?: (query: string) => void
 }
 
-export function JobSearchBar({ onSearch }: JobSearchBarProps) {
-  const [query, setQuery] = useState("")
+export function JobSearchBar({ defaultQuery = "", onSearch }: JobSearchBarProps) {
+  const [query, setQuery] = useState(defaultQuery)
+
+  const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSearch?.(query)
+
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+    const search = data.searchField as string;
+
+    const params = new URLSearchParams();
+    params.set('search', search);
+    router.push(`/browse-jobs?${params.toString()}`);
+
+    onSearch?.(search)
   }
 
   return (
@@ -25,6 +40,7 @@ export function JobSearchBar({ onSearch }: JobSearchBarProps) {
         <div className="relative flex-1">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            name="searchField"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search by job title, keywords..."

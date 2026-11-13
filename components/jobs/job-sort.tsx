@@ -16,16 +16,17 @@ const SORT_OPTIONS = [
 ]
 
 type JobSortProps = {
+  value?: string
   onValueChange?: (value: string) => void
 }
 
-export function JobSort({ onValueChange }: JobSortProps) {
+export function JobSort({ value = "Most Recent", onValueChange }: JobSortProps) {
   return (
     <div className="flex items-center gap-2 text-sm text-muted-foreground">
       <span className="hidden sm:inline">Sort by:</span>
 
       <Select
-        defaultValue="Most Recent"
+        value={value}
         onValueChange={(value) => {
           if (value !== null) onValueChange?.(value)
         }}
