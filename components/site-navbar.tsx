@@ -19,7 +19,7 @@ function SiteNavbar() {
   } = authClient.useSession()
 
   const links = [
-    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/browse-jobs", label: "Browse Jobs" },
     { href: "/company", label: "Company" },
     { href: "/pricing", label: "Pricing" },
     {
@@ -86,13 +86,13 @@ function SiteNavbar() {
             className="hidden items-center gap-6 text-sm md:flex"
           >
             {links.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="text-foreground/80 transition-colors hover:text-foreground"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
 
             <span aria-hidden="true" className="h-4 w-px bg-border/70" />
@@ -169,14 +169,14 @@ function SiteNavbar() {
         <div className="mx-auto mt-2 max-w-6xl rounded-xl border border-border/40 bg-card p-4 md:hidden">
           <nav aria-label="Mobile" className="flex flex-col">
             {links.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 onClick={closeMenu}
                 className="rounded-lg px-2 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-muted/50 hover:text-foreground"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 

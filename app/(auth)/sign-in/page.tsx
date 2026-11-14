@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Suspense } from "react"
 import { SignInForm } from "@/components/auth/sign-in-form"
 
 export default function SignInPage() {
@@ -9,7 +10,9 @@ export default function SignInPage() {
           HireLoop
         </Link>
 
-        <SignInForm />
+        <Suspense>
+          <SignInForm />
+        </Suspense>
       </div>
     </main>
   )

@@ -18,9 +18,27 @@ Next.js 16.4.4 (pinned exact) + React 19, App Router only (`app/`, no `pages/`).
 - `npm run lint` — runs bare `eslint` (flat config in `eslint.config.mjs`; ignores are overridden there).
 - `npm run typecheck` — `tsc --noEmit`.
 - `npm run format` — Prettier on `**/*.{ts,tsx}` only (other file types aren't covered).
+- `npm run db:verify` — standalone Node script (`node --env-file=.env scripts/verify-mongodb.ts`, TS imports run natively) that connects to MongoDB Atlas, creates the better-auth collections/indexes if missing, and prints collection stats. Never inserts, drops, or overwrites data.
 - `npx shadcn@latest add <name>` — adds components to `components/ui` (per `components.json`; README has this too).
 
 Run `dev` or `build` once before `typecheck` on a fresh clone / after a Next upgrade: tsconfig includes generated `next-env.d.ts` and `.next/types/**` (both gitignored), which those commands produce.
+
+## Env
+
+- `.env` exists but is untracked; there is no `.env.example`. Required: `MONGODB_URL` — `lib/mongodb.ts` throws at import time without it, so the server won't start at all. Also used: `MONGODB_DB_NAME` (defaults to `loopadmin`), `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (Google social login), `NEXT_PUBLIC_BASE_URL` (see "Jobs data" below).
+- `db:verify` failure usually means Atlas Network Access doesn't include your current IP — that allow list is per-machine, not in the repo.
+
+## Auth & MongoDB (better-auth)
+
+- Auth is better-auth: server config in `lib/auth.ts`, mounted at `app/api/auth/[...all]/route.ts` via `toNextJsHandler`; client in `lib/auth-client.ts` (exports `signIn`, `signUp`, `signOut`, `useSession`). Email/password plus Google social provider.
+- Roles are `seeker | recruiter | admin` (`ROLES` in `lib/auth.ts`), stored as a better-auth `user.additionalFields.role`, accepted from the client at sign-up and validated by a `before` hook — client forms must send `name` (not `fullName`) plus `role` to `signUp`.
+- One shared Mongo client in `lib/mongodb.ts`, cached on `globalThis` so dev HMR doesn't create duplicate connections; it targets the `loopadmin` DB explicitly (never the driver's implicit `test` DB). Its `ensureDatabaseReady()` creates the better-auth collections/indexes (idempotent, no data); it also fires-and-forgets from the auth route handler on first request.
+- Auth data lives in Mongo; job postings do NOT (see below).
+
+## Jobs data: external backend, not this app
+
+- Jobs and applications come from a separate backend API at `NEXT_PUBLIC_BASE_URL` (default `http://localhost:5000`) — it must be running for job pages to work; Mongo is only for auth.
+- `lib/api/*.ts` are read helpers (`getJobs`, `getJobById`, ...), `lib/actions/*.ts` are write helpers (`createJob`, `deleteJob`). Despite the folder name, these are plain `fetch` functions, not Next.js server actions — don't add a `"use server"` directive there.
 
 ## Toolchain quirks
 

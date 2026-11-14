@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { GoogleButton } from "@/components/auth/google-button"
 import {
   Card,
   CardContent,
@@ -181,6 +182,14 @@ export function SignUpForm({
           <Button type="submit" className="w-full">
             Sign Up
           </Button>
+
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />
+            Or
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
+          <GoogleButton callbackURL="/" />
         </form>
       </CardContent>
       <div className="px-(--card-spacing) pb-(--card-spacing) text-center text-sm text-muted-foreground">

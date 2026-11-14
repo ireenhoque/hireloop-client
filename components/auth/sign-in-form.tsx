@@ -3,10 +3,12 @@
 import { useState } from "react"
 import type { ChangeEvent, FormEvent } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { GoogleButton } from "@/components/auth/google-button"
 import {
   Card,
   CardContent,
@@ -21,9 +23,15 @@ const initialFormData = {
 }
 
 export function SignInForm() {
+  const searchParams = useSearchParams()
   const [formData, setFormData] = useState(initialFormData)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+
+  // ?redirect=/browse-jobs/<id> → come back to that page after signing in.
+  // Only internal paths are allowed, so the param can't be abused for open redirects.
+  const redirectParam = searchParams.get("redirect")
+  const callbackURL = redirectParam?.startsWith("/") ? redirectParam : "/"
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -45,7 +53,7 @@ export function SignInForm() {
         email: formData.email,
         password: formData.password,
         rememberMe: true,
-        callbackURL: "/",
+        callbackURL,
       })
 
       if (error) {
@@ -116,6 +124,14 @@ export function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
+
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          Or
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <GoogleButton callbackURL={callbackURL} />
       </CardContent>
 
       <div className="px-(--card-spacing) pb-(--card-spacing) text-center text-sm text-muted-foreground">

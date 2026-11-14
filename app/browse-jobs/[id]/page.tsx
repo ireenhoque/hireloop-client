@@ -1,10 +1,10 @@
+
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
   ArrowLeft,
   BadgeCheck,
   Banknote,
-  Bookmark,
   Box,
   Brain,
   Building2,
@@ -24,9 +24,10 @@ import { Panel } from "@/app/components/panel"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNavbar } from "@/components/site-navbar"
 import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { getJob } from "@/lib/api/jobs"
+import { JobActions } from "@/components/jobs/job-actions"
+import { getJobById } from "@/lib/api/jobs"
 import { CATEGORY_STYLES, FALLBACK_CATEGORY_STYLE } from "@/lib/category-styles"
 import { formatCompensation, formatLocation } from "@/lib/format"
 import { cn } from "@/lib/utils"
@@ -96,7 +97,7 @@ function BulletList({ items }: { items: string[] }) {
 
 const JobDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const job = (await getJob(id)) as JobPost | null
+  const job = await getJobById(id) as JobPost | null
 
   if (!job?._id) {
     notFound()
@@ -144,17 +145,11 @@ const JobDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) =
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="text-muted-foreground"
-                aria-label={`Bookmark ${job.title}`}
-              >
-                <Bookmark />
-              </Button>
-              <Button>Apply Now</Button>
-            </div>
+            <JobActions
+              jobId={job._id}
+              jobTitle={job.title}
+              companyName={job.companyName}
+            />
           </div>
         </Panel>
 

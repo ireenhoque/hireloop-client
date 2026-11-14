@@ -34,6 +34,11 @@ export const auth = betterAuth({
         input: true,
         defaultValue: "seeker",
       },
+      jobTitle: {
+        type: "string",
+        input: true,
+        defaultValue: "",
+      },
     },
   },
   socialProviders: {
